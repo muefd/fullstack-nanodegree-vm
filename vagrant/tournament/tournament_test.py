@@ -53,6 +53,7 @@ def testStandingsBeforeMatches():
     registerPlayer("Randy Schwartz")
     standings = playerStandings()
     if len(standings) < 2:
+        print standings
         raise ValueError("Players should appear in playerStandings even before "
                          "they have played any matches.")
     elif len(standings) > 2:
@@ -85,6 +86,7 @@ def testReportMatches():
     reportMatch(id3, id4)
     standings = playerStandings()
     for (i, n, w, m) in standings:
+        ##print i, n, w, m
         if m != 1:
             raise ValueError("Each player should have one match recorded.")
         if i in (id1, id3) and w != 1:
