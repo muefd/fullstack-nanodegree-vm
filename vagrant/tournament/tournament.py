@@ -5,19 +5,26 @@
 
 import psycopg2
 
-def connect():
-    """Connect to the PostgreSQL database.  Returns database connection and cursor."""
+def connect(database_name="tournament"):
+    """Connect to the PostgreSQL database.  Returns database connection and cursor.
 
-    db = psycopg2.connect("dbname=tournament")
-    cursor = db.cursor()
-    return db, cursor
+    Args:
+      database_name: name of the database that you need to connect.
+    """
+
+    try:
+        db = psycopg2.connect(dbname=database_name)
+        cursor = db.cursor()
+        return db, cursor
+    except:
+        print("Error connecting to database '{}'".format(database_name))
 
 
 def deleteMatches():
     """Remove all the match records from the database."""
 
     db, cursor = connect()
-    cursor.execute("delete from matches")
+    cursor.execute("truncate matches")
     db.commit()
     db.close()
 
@@ -25,14 +32,14 @@ def deleteMatches():
 def deletePlayers():
     """Remove all the player records from the database."""
     db, cursor = connect()
-    cursor.execute("delete from players")
+    cursor.execute("truncate players cascade")
     db.commit()
     db.close()
 
 
 def countPlayers():
-    """Returns the number of players currently registered for a tournament.
-    """
+    """Returns the number of players currently registered for a tournament."""
+
     db, cursor = connect()
     cursor.execute("select count(*) from players")
     players = cursor.fetchone()[0]
